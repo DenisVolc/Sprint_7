@@ -11,8 +11,8 @@ import java.io.File;
 import java.util.Random;
 
 public class Post {
-    private String sufix = String.valueOf((int)(Math.random()*10000));
-    private String login = "ninja";
+    private String sufix = String.valueOf((int)(Math.random()*10000));//todo разобраться как засунуть это в @Before
+    private String login = "ninja"+sufix;
     private String password = "1234";
 
     @Before
@@ -21,38 +21,36 @@ public class Post {
     }
     @Test
     public void createCourier() {
-        CreateCourierCard courierCard = new CreateCourierCard(//вариант 1
-                login + sufix,
+        CreateCourierCard courierCard = new CreateCourierCard(
+                login ,
                 password,
                 "saske");
-//        String json = "{\"login\": \"VasyaVasilev\",\"password\": \"123\",\"firstName\": \"Vasya\"}"; //Вариант 2
-//        File jsonFile = new File("src/json/newCourier.json");//вариант 3
 
          given()
                  .spec(BaseHttpClient.baseRequestSpec())
                  .body(courierCard)
-                .when()
-                .post("/api/v1/courier")
-                .then().statusCode(201);
+                 .when()
+                 .post("/api/v1/courier")
+                 .then().statusCode(201);
 
     }
     @After
     public void cleanUp(){
         GetIdCard getIdCard = new GetIdCard(
                 login
-                ,password );
+                ,password);
 
-        IdCard idCard = given()
+        IdCard idCard = given()//записал id пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(getIdCard)
                 .post("/api/v1/courier/login")
                 .body().as(IdCard.class);
-        given()
+
+        given()//удалил пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body("{\"id\": \""+idCard.getId()+"\"}")
-                .delete("/api/v1/courier/:id");
+                .delete("/api/v1/courier/"+idCard.getId());
 
-        System.out.println(idCard.getId());
     }
 
 }
