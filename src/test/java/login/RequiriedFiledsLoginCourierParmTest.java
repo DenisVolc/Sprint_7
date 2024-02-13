@@ -1,3 +1,7 @@
+package login;
+
+import base.BaseHttpClient;
+import endpoint.EndPoints;
 import json.CreateCourierCard;
 import json.GetIdRequestCard;
 import json.GetIdResponseCard;
@@ -27,9 +31,9 @@ public class RequiriedFiledsLoginCourierParmTest {
     @Parameterized.Parameters
     public static Object[][]authCombination(){
         return new Object[][]{
-                {null,null},
-                {null,"123"},
-                {"sdasdfadfaas",null}
+                {"",""},
+                {"","123"},
+                {"sdasdfadfaas",""}
         };
     }
     @Before
@@ -45,13 +49,13 @@ public class RequiriedFiledsLoginCourierParmTest {
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(courierCard)
                 .when()
-                .post(EndPoints.createCourier);
+                .post(EndPoints.CREATE_COURIER);
     }
-    // todo    для авторизации нужно передать все обязательные поля;
-// todo   система вернёт ошибку, если неправильно указать логин или пароль;
-// todo   если какого-то поля нет, запрос возвращает ошибку;
+    //     для авторизации нужно передать все обязательные поля;
+//    система вернёт ошибку, если неправильно указать логин или пароль;
+//    если какого-то поля нет, запрос возвращает ошибку;
     @Test
-    public void requiriedFiledsCourier() {//todo сделать параметризированым  и перебрать три комбинации, бещ логина, без пароля, без ничего
+    public void requiriedFiledsCourier() {
         LoginCourierRequestCard courierCard = new LoginCourierRequestCard(
                 login ,
                 password
@@ -61,7 +65,7 @@ public class RequiriedFiledsLoginCourierParmTest {
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(courierCard)
                 .when()
-                .post(EndPoints.loginCourier)
+                .post(EndPoints.LOGIN_COURIER)
                 .then().statusCode(400)
                 .and().assertThat().body("message",equalTo("Недостаточно данных для входа"));
     }
@@ -74,7 +78,7 @@ public class RequiriedFiledsLoginCourierParmTest {
         GetIdResponseCard idCard = given()//записал id пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(getIdCard)
-                .post(EndPoints.loginCourier)
+                .post(EndPoints.LOGIN_COURIER)
                 .body().as(GetIdResponseCard.class);
 
         given()//удалил пользователя

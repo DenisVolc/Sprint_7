@@ -1,7 +1,12 @@
+package createcourier;
+
+import base.BaseHttpClient;
+import endpoint.EndPoints;
 import json.CreateCourierCard;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
 
 import static io.restassured.RestAssured.given;
 @RunWith(Parameterized.class)
@@ -17,14 +22,14 @@ public class RequiriedFiledsCreateCourierParmTest {
     @Parameterized.Parameters
     public static Object[][]authCombination(){
         return new Object[][]{
-                {null,null},
-                {null,"123"},
-                {"user",null}
+                {"",""},
+                {"","123"},
+                {"user",""}
         };
     }
 
     @Test
-    public void requiriedFiledsCourier() {//todo сделать параметризированым  и перебрать три комбинации, бещ логина, без пароля, без ничего
+    public void requiriedFiledsCourier() {// сделать параметризированым  и перебрать три комбинации, бещ логина, без пароля, без ничего
         CreateCourierCard courierCard = new CreateCourierCard(
                 login ,
                 password,
@@ -34,7 +39,7 @@ public class RequiriedFiledsCreateCourierParmTest {
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(courierCard)
                 .when()
-                .post(EndPoints.createCourier)
+                .post(EndPoints.CREATE_COURIER)
                 .then().statusCode(400);
     }
 }

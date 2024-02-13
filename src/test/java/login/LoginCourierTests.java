@@ -1,3 +1,7 @@
+package login;
+
+import base.BaseHttpClient;
+import endpoint.EndPoints;
 import json.CreateCourierCard;
 import json.GetIdRequestCard;
 import json.GetIdResponseCard;
@@ -26,7 +30,7 @@ public class LoginCourierTests {
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(courierCard)
                 .when()
-                .post(EndPoints.createCourier);
+                .post(EndPoints.CREATE_COURIER);
     }
     //    курьер может авторизоваться;
     //    успешный запрос возвращает id.
@@ -37,7 +41,7 @@ public class LoginCourierTests {
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(card)
                 .when()
-                .post(EndPoints.loginCourier)
+                .post(EndPoints.LOGIN_COURIER)
                 .then().statusCode(200)
                 .and()
                 .assertThat().body("id",notNullValue());
@@ -54,7 +58,7 @@ public class LoginCourierTests {
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(card)
                 .when()
-                .post(EndPoints.loginCourier)
+                .post(EndPoints.LOGIN_COURIER)
                 .then().statusCode(404);
     }
 
@@ -67,7 +71,7 @@ public class LoginCourierTests {
         GetIdResponseCard idCard = given()//записал id пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(getIdCard)
-                .post(EndPoints.loginCourier)
+                .post(EndPoints.LOGIN_COURIER)
                 .body().as(GetIdResponseCard.class);
 
         given()//удалил пользователя

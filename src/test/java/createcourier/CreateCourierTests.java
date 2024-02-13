@@ -1,4 +1,8 @@
+package createcourier;
+
+import base.BaseHttpClient;
 import json.CreateCourierCard;
+import endpoint.EndPoints;
 import json.GetIdRequestCard;
 import json.GetIdResponseCard;
 import org.junit.Before;
@@ -32,7 +36,7 @@ public class CreateCourierTests {
                  .spec(BaseHttpClient.baseRequestSpec())
                  .body(courierCard)
                  .when()
-                 .post(EndPoints.createCourier)
+                 .post(EndPoints.CREATE_COURIER)
                  .then().statusCode(201)
                  .and()
                  .assertThat().body("ok",equalTo(true));
@@ -71,7 +75,7 @@ public class CreateCourierTests {
         GetIdResponseCard idCard = given()//записал id пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(getIdCard)
-                .post(EndPoints.loginCourier)
+                .post(EndPoints.LOGIN_COURIER)
                 .body().as(GetIdResponseCard.class);
 
         given()//удалил пользователя
