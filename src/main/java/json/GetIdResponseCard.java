@@ -1,9 +1,9 @@
 package json;
 
-public class IdCard {
+public class GetIdResponseCard {
     private String id;
 
-    public IdCard(String id) {
+    public GetIdResponseCard(String id) {
         this.id = id;
     }
 

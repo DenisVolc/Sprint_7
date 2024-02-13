@@ -1,11 +1,11 @@
 package json;
 
-public class GetIdCard {
+public class GetIdRequestCard {
     private String login;
     private String password;
 
 
-    public GetIdCard(String login, String password) {
+    public GetIdRequestCard(String login, String password) {
         this.login = login;
         this.password = password;
     }
