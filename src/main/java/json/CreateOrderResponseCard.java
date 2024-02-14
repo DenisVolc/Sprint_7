@@ -1,6 +1,6 @@
 package json;
 
-public class OrderListResponseCard {
+public class CreateOrderResponseCard {
     private String track;
 
     public void setTrack(String track) {
@@ -9,7 +9,7 @@ public class OrderListResponseCard {
     public String getTrack() {
         return track;
     }
-    public OrderListResponseCard(String track) {
+    public CreateOrderResponseCard(String track) {
         this.track = track;
     }
 }

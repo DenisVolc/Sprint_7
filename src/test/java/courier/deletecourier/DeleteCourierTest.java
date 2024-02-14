@@ -1,4 +1,4 @@
-package deletecourier;
+package courier.deletecourier;
 
 import base.BaseHttpClient;
 import endpoint.EndPoints;

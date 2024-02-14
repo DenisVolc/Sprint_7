@@ -1,11 +1,9 @@
-package listorders;
+package order.listorders;
 
 import base.BaseHttpClient;
 import endpoint.EndPoints;
-import json.CancelOrderRequestCard;
 import json.CreateOrderRequestCard;
-import json.OrderListResponseCard;
-import org.junit.After;
+import json.CreateOrderResponseCard;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +12,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class OrderList {
-    private OrderListResponseCard orderNumber;
+    private CreateOrderResponseCard orderNumber;
     @Before
     public void createOrder(){
         CreateOrderRequestCard order = new CreateOrderRequestCard(
@@ -28,19 +26,14 @@ public class OrderList {
                 "Hello World",
                 new String[]{"BLACK"}
         );
-         orderNumber = given()
+        given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(order)
                 .when()
-                .post(EndPoints.ORDER)
-                .body()
-                .as(OrderListResponseCard.class);
-
-//        System.out.println(orderNumber.getTrack());
+                .post(EndPoints.ORDER);
     }
     @Test
     public void listOders(){
-        System.out.println(orderNumber.getTrack());
          given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()

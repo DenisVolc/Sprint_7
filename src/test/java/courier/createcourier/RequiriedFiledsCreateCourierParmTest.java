@@ -1,4 +1,4 @@
-package createcourier;
+package courier.createcourier;
 
 import base.BaseHttpClient;
 import endpoint.EndPoints;

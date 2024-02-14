@@ -1,4 +1,4 @@
-package creteorder;
+package order.creteorder;
 
 import base.BaseHttpClient;
 import endpoint.EndPoints;

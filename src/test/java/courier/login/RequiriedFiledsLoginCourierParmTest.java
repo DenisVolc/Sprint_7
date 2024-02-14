@@ -1,4 +1,4 @@
-package login;
+package courier.login;
 
 import base.BaseHttpClient;
 import endpoint.EndPoints;
@@ -19,8 +19,8 @@ public class RequiriedFiledsLoginCourierParmTest {
 
     private String index;
     private String login;
-    private String setUpLogin = "sdasdfadfaas";
-    private String setUpPassword = "123";
+    private static String setUpLogin = "sdasdfadfaas";
+    private static String setUpPassword = "123";
     private String password = "1234";
 
     public RequiriedFiledsLoginCourierParmTest(String login, String password){
@@ -31,8 +31,8 @@ public class RequiriedFiledsLoginCourierParmTest {
     public static Object[][]authCombination(){
         return new Object[][]{
                 {"",""},
-                {"","123"},
-                {"sdasdfadfaas",""}
+                {"",setUpPassword},
+                {setUpLogin,""}
         };
     }
     @Before
