@@ -52,7 +52,6 @@ public class EmptyFieldsAccpetOrderParmTest {
                 .then()
                 .extract().path("track");
 
-
         // вывести заказ по трек-номеру, получить айди заказа
         orderId = given()
                 .spec(BaseHttpClient.baseRequestSpec())
@@ -60,6 +59,7 @@ public class EmptyFieldsAccpetOrderParmTest {
                 .get(EndPoints.getOrderByTrackNumber(orderTrackNumber))
                 .then().extract()
                 .path("order.id");
+
         //создать курьера
         index = String.valueOf((int)(Math.random()*10000));
         login += index;
@@ -72,6 +72,7 @@ public class EmptyFieldsAccpetOrderParmTest {
                 .body(courierCard)
                 .when()
                 .post(EndPoints.CREATE_COURIER);
+
         //залогиниться курьером, получить айди курьера
         LoginCourierRequestCard card = new LoginCourierRequestCard(login,password);
         courierId = given()
