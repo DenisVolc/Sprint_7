@@ -49,7 +49,7 @@ public class CreateOrdersColorsParmTests {
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(order)
                 .when()
-                .post(EndPoints.CREATE_ORDER)
+                .post(EndPoints.ORDER)
                 .then().statusCode(201)
                 .and()
                 .assertThat().body("track",notNullValue());;

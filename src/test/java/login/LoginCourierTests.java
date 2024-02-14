@@ -3,8 +3,8 @@ package login;
 import base.BaseHttpClient;
 import endpoint.EndPoints;
 import json.CreateCourierCard;
-import json.GetIdRequestCard;
-import json.GetIdResponseCard;
+
+import json.LoginCourierResponseCard;
 import json.LoginCourierRequestCard;
 import org.junit.After;
 import org.junit.Before;
@@ -64,15 +64,15 @@ public class LoginCourierTests {
 
     @After
     public void cleanUp(){
-        GetIdRequestCard getIdCard = new GetIdRequestCard(
+        LoginCourierRequestCard getIdCard = new LoginCourierRequestCard(
                 login
                 ,password);
 
-        GetIdResponseCard idCard = given()//записал id пользователя
+        LoginCourierResponseCard idCard = given()//записал id пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(getIdCard)
                 .post(EndPoints.LOGIN_COURIER)
-                .body().as(GetIdResponseCard.class);
+                .body().as(LoginCourierResponseCard.class);
 
         given()//удалил пользователя
                 .spec(BaseHttpClient.baseRequestSpec())

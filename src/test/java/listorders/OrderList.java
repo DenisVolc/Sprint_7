@@ -2,8 +2,10 @@ package listorders;
 
 import base.BaseHttpClient;
 import endpoint.EndPoints;
+import json.CancelOrderRequestCard;
 import json.CreateOrderRequestCard;
 import json.OrderListResponseCard;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,7 +32,7 @@ public class OrderList {
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(order)
                 .when()
-                .post(EndPoints.CREATE_ORDER)
+                .post(EndPoints.ORDER)
                 .body()
                 .as(OrderListResponseCard.class);
 
@@ -42,10 +44,18 @@ public class OrderList {
          given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
-                .get(EndPoints.CREATE_ORDER)//"?id=" + orderNumber.getTrack()
+                .get(EndPoints.ORDER)//"?id=" + orderNumber.getTrack()
                 .then().statusCode(200)
-                .and().assertThat().body("orders.id",notNullValue());//todo не уверен что нужно проверять только наполненость списка. возвожно надо искать какой-то конкретный заказ, жду ответа в пачке
-
+                .and().assertThat().body("orders.id",notNullValue());
     }
+//    @After
+//    public void cleanUp(){
+//        CancelOrderRequestCard cancelRequest= new CancelOrderRequestCard(orderNumber.getTrack());
+//        given()
+//                .spec(BaseHttpClient.baseRequestSpec())
+//                .body(cancelRequest)
+//                .when()
+//                .put(EndPoints.CANCEL_ORDER);
+//    }
 
 }
