@@ -45,7 +45,7 @@ public class AcceptOrderTest {
         orderId = given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
-                .get(EndPoints.getIdByTrackNumber(orderTrackNumber))
+                .get(EndPoints.getOrderByTrackNumber(orderTrackNumber))
                 .then().extract()
                 .path("order.id");
         //создать курьера

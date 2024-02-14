@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(Parameterized.class)
 public class EmptyFieldsAccpetOrderParmTest {
@@ -58,7 +57,7 @@ public class EmptyFieldsAccpetOrderParmTest {
         orderId = given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
-                .get(EndPoints.getIdByTrackNumber(orderTrackNumber))
+                .get(EndPoints.getOrderByTrackNumber(orderTrackNumber))
                 .then().extract()
                 .path("order.id");
         //создать курьера
@@ -82,7 +81,6 @@ public class EmptyFieldsAccpetOrderParmTest {
                 .post(EndPoints.LOGIN_COURIER)
                 .then().extract()
                 .path("id");
-        System.out.println(courierId);
     }
     @Parameterized.Parameters
     public static Object[][]acceptCombination(){
