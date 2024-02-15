@@ -35,7 +35,7 @@ public class GetOrderByTrackNumderTests {
                 .extract().path("track").toString();
     }
     @Test
-    public void getOrderTest(){//    todo успешный запрос возвращает объект с заказом;
+    public void getOrderTest(){//     успешный запрос возвращает объект с заказом;
 
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
@@ -46,7 +46,7 @@ public class GetOrderByTrackNumderTests {
                 .assertThat().body("order",notNullValue());
     }
     @Test
-    public void noTrackNumberGetOrderTest(){//    todo запрос без номера заказа возвращает ошибку;
+    public void noTrackNumberGetOrderTest(){//     запрос без номера заказа возвращает ошибку;
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
@@ -58,7 +58,7 @@ public class GetOrderByTrackNumderTests {
 
     }
     @Test
-    public void wrongTrackNumberGetOrderTest(){//    todo запрос с несуществующим заказом возвращает ошибку.
+    public void wrongTrackNumberGetOrderTest(){//     запрос с несуществующим заказом возвращает ошибку.
 
         given()
                 .spec(BaseHttpClient.baseRequestSpec())

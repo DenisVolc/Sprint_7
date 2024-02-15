@@ -43,7 +43,7 @@ public class CreateCourierTests {
 
     }
     @Test
-    public void duplicateCourier() { //todo сделать @Steps
+    public void duplicateCourier() {
         CreateCourierCard courierCard = new CreateCourierCard(
                 login ,
                 password,
