@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class GetOrderByTrackNumderTests {
-    private int orderTrackNumber;
+    private String orderTrackNumber;
 
     @Before
     public void createOrder(){
@@ -32,7 +32,7 @@ public class GetOrderByTrackNumderTests {
                 .when()
                 .post(EndPoints.ORDER)
                 .then()
-                .extract().path("track");
+                .extract().path("track").toString();
     }
     @Test
     public void getOrderTest(){//    todo успешный запрос возвращает объект с заказом;
@@ -40,7 +40,8 @@ public class GetOrderByTrackNumderTests {
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
-                .get(EndPoints.getOrderByTrackNumber(orderTrackNumber))
+                .queryParam("t",orderTrackNumber)
+                .get(EndPoints.ORDER_BY_TRACK)
                 .then().statusCode(200)
                 .assertThat().body("order",notNullValue());
     }
@@ -49,7 +50,8 @@ public class GetOrderByTrackNumderTests {
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
-                .get(EndPoints.getOrderByTrackNumber())
+                .queryParam("t","")
+                .get(EndPoints.ORDER_BY_TRACK)
                 .then().statusCode(400)
                 .assertThat().body("message",equalTo("Недостаточно данных для поиска"));
 
@@ -61,7 +63,8 @@ public class GetOrderByTrackNumderTests {
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
-                .get(EndPoints.getOrderByTrackNumber(orderTrackNumber+1))
+                .queryParam("t",orderTrackNumber+1)
+                .get(EndPoints.ORDER_BY_TRACK)
                 .then().statusCode(404)
                 .assertThat().body("message",equalTo("Заказ не найден"));
     }

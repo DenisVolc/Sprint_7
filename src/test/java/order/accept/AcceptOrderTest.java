@@ -12,9 +12,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class AcceptOrderTest {
-    private int orderTrackNumber;
-    private int orderId;
-    private int courierId;
+    private String orderTrackNumber;
+    private String orderId;
+    private String courierId;
     private String index;
     private String login = "user";
     private String password = "1234";
@@ -38,18 +38,19 @@ public class AcceptOrderTest {
                 .when()
                 .post(EndPoints.ORDER)
                 .then()
-                .extract().path("track");
+                .extract().path("track").toString();
 
 
         // вывести заказ по трек-номеру, получить айди заказа
         orderId = given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
-                .get(EndPoints.getOrderByTrackNumber(orderTrackNumber))
+                .queryParam("t",orderTrackNumber)
+                .get(EndPoints.ORDER_BY_TRACK)
                 .then().extract()
-                .path("order.id");
+                .path("order.id").toString();
         //создать курьера
-        index = String.valueOf((int)(Math.random()*10000));
+        index = BaseHttpClient.getRandomIndex();
         login += index;
         CreateCourierCard courierCard = new CreateCourierCard(
                 login ,
@@ -68,7 +69,7 @@ public class AcceptOrderTest {
                 .when()
                 .post(EndPoints.LOGIN_COURIER)
                 .then().extract()
-                .path("id");
+                .path("id").toString();
         System.out.println(courierId);
     }
     @Test
@@ -76,22 +77,79 @@ public class AcceptOrderTest {
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
-                .put(EndPoints.acceptOrder(orderId,courierId))
+                .queryParam("courierId",courierId)
+                .put(EndPoints.ACCEPT_ORDER+orderId)
                 .then().statusCode(200)
                 .and().assertThat().body("ok",equalTo(true));
     }
+    //    2.если не передать id курьера, запрос вернёт ошибку;
+    //    4.если не передать номер заказа, запрос вернёт ошибку;
+    @Test
+    public void emptyFieldsAcceptOrder(){ //Здесь возвращается 404, вместо 400. Похоже на дефект
+
+        given()
+                .spec(BaseHttpClient.baseRequestSpec())
+                .when()
+                .queryParam("courierId","")
+                .put(EndPoints.ACCEPT_ORDER)
+                .then().statusCode(400);
+    }
+    @Test
+    public void emptyOrderIdAcceptOrder(){ //Здесь возвращается 404, вместо 400. Похоже на дефект
+        given()
+                .spec(BaseHttpClient.baseRequestSpec())
+                .when()
+                .queryParam("courierId",courierId)
+                .put(EndPoints.ACCEPT_ORDER)
+                .then().statusCode(400);
+    }
+    @Test
+    public void emptyCourierIdAcceptOrder(){
+        given()
+                .spec(BaseHttpClient.baseRequestSpec())
+                .when()
+                .queryParam("courierId","")
+                .put(EndPoints.ACCEPT_ORDER+orderId)
+                .then().statusCode(400);
+    }
 
 
-//todo    3.если передать неверный id курьера, запрос вернёт ошибку;
+//    3.если передать неверный id курьера, запрос вернёт ошибку;
+//    5.если передать неверный номер заказа, запрос вернёт ошибку.
 
-//todo    5.если передать неверный номер заказа, запрос вернёт ошибку.
-
+    @Test
+    public void wrongFieldsAcceptOrder(){
+        given()
+                .spec(BaseHttpClient.baseRequestSpec())
+                .when()
+                .queryParam("courierId",courierId+1)
+                .put(EndPoints.ACCEPT_ORDER+orderId+1)
+                .then().statusCode(404);
+    }
+    @Test
+    public void wrongOrderIdAcceptOrder(){
+        given()
+                .spec(BaseHttpClient.baseRequestSpec())
+                .when()
+                .queryParam("courierId",courierId)
+                .put(EndPoints.ACCEPT_ORDER+orderId+1)
+                .then().statusCode(404);
+    }
+    @Test
+    public void wrongCourierIdAcceptOrder(){
+        given()
+                .spec(BaseHttpClient.baseRequestSpec())
+                .when()
+                .queryParam("courierId",courierId+1)
+                .put(EndPoints.ACCEPT_ORDER+orderId)
+                .then().statusCode(404);
+    }
     @After
     public void cleanUp(){
         //deleteCourier(idCourier){}
         given()//удалил пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
-                .delete(EndPoints.deleteCourier(String.valueOf(courierId)));
+                .delete(EndPoints.DELETE_COURIER + courierId);
     }
 }
 

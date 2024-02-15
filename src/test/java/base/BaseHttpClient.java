@@ -14,8 +14,11 @@ public class BaseHttpClient {
                 .setRelaxedHTTPSValidation()
                 .addFilter(new RequestLoggingFilter())
                 .addFilter(new ResponseLoggingFilter())
-//                .addFilter(new ErrorLoggingFilter())
+                .addFilter(new ErrorLoggingFilter())
                 .build();
+    }
+    public static String getRandomIndex(){
+        return String.valueOf((int)(Math.random()*1000000));
     }
 
 

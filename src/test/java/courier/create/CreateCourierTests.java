@@ -1,4 +1,4 @@
-package courier.createcourier;
+package courier.create;
 
 import base.BaseHttpClient;
 import json.CreateCourierCard;
@@ -21,7 +21,7 @@ public class CreateCourierTests {
 
     @Before
     public void setUp() {
-        index = String.valueOf((int)(Math.random()*10000));
+        index = BaseHttpClient.getRandomIndex();
         login += index;
         firstName += index;
     }
@@ -43,7 +43,7 @@ public class CreateCourierTests {
 
     }
     @Test
-    public void duplicateCourier() {
+    public void duplicateCourier() { //todo сделать @Steps
         CreateCourierCard courierCard = new CreateCourierCard(
                 login ,
                 password,
@@ -53,8 +53,7 @@ public class CreateCourierTests {
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(courierCard)
                 .when()
-                .post("/api/v1/courier")
-                ;
+                .post("/api/v1/courier");
 
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
@@ -80,7 +79,7 @@ public class CreateCourierTests {
         given()//удалил пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(idCard)
-                .delete(EndPoints.deleteCourier(idCard.getId()));
+                .delete(EndPoints.DELETE_COURIER + idCard.getId());
 
     }
 

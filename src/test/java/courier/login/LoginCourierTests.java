@@ -19,7 +19,7 @@ public class LoginCourierTests {
     private String password = "123";
     @Before
     public void setUp(){
-        index = String.valueOf((int)(Math.random()*10000));
+        index = BaseHttpClient.getRandomIndex();
         login += index;
         CreateCourierCard courierCard = new CreateCourierCard(
                 login ,
@@ -77,6 +77,6 @@ public class LoginCourierTests {
         given()//удалил пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(idCard)
-                .delete(EndPoints.deleteCourier(idCard.getId()));
+                .delete(EndPoints.DELETE_COURIER + idCard.getId());
     }
 }

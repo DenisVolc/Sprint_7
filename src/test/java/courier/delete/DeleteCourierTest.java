@@ -1,4 +1,4 @@
-package courier.deletecourier;
+package courier.delete;
 
 import base.BaseHttpClient;
 import endpoint.EndPoints;
@@ -20,7 +20,7 @@ public class DeleteCourierTest {
     LoginCourierRequestCard loginCourierRequestCard;
     @Before
     public void setUp() {
-        index = String.valueOf((int)(Math.random()*10000));
+        index = BaseHttpClient.getRandomIndex();
         login += index;
         CreateCourierCard courierCard = new CreateCourierCard(
                 login ,
@@ -46,7 +46,7 @@ public class DeleteCourierTest {
     public void deleteCourier(){     //    2.успешный запрос возвращает ok: true;
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
-                .delete(EndPoints.deleteCourier(courierId.getId()))
+                .delete(EndPoints.DELETE_COURIER+courierId.getId())
                 .then().statusCode(200)
                 .and()
                 .assertThat().body("ok",equalTo(true));
@@ -56,14 +56,14 @@ public class DeleteCourierTest {
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body("{\"id\":}")
-                .delete(EndPoints.deleteCourier(""))
+                .delete(EndPoints.DELETE_COURIER)
                 .then().statusCode(400);
     }
     @Test
     public void wrongIddeleteCourier(){//    4.если отправить запрос с несуществующим id, вернётся ошибка.
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
-                .delete(EndPoints.deleteCourier(courierId.getId()+1))
+                .delete(EndPoints.DELETE_COURIER + courierId.getId()+1)
                 .then().statusCode(404);
     }
 

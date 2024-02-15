@@ -83,7 +83,7 @@ public class RequiriedFiledsLoginCourierParmTest {
         given()//удалил пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(idCard)
-                .delete(EndPoints.deleteCourier(idCard.getId()));
+                .delete(EndPoints.DELETE_COURIER + idCard.getId());
     }
 
 }

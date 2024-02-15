@@ -1,4 +1,4 @@
-package order.listorders;
+package order.list;
 
 import base.BaseHttpClient;
 import endpoint.EndPoints;
