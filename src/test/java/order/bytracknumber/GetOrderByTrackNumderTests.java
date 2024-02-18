@@ -12,7 +12,6 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class GetOrderByTrackNumderTests {
     private String orderTrackNumber;
-
     @Before
     public void createOrder(){
         CreateOrderRequestCard order = new CreateOrderRequestCard(
@@ -54,8 +53,6 @@ public class GetOrderByTrackNumderTests {
                 .get(EndPoints.ORDER_BY_TRACK)
                 .then().statusCode(400)
                 .assertThat().body("message",equalTo("Недостаточно данных для поиска"));
-
-
     }
     @Test
     public void wrongTrackNumberGetOrderTest(){//     запрос с несуществующим заказом возвращает ошибку.
@@ -68,7 +65,4 @@ public class GetOrderByTrackNumderTests {
                 .then().statusCode(404)
                 .assertThat().body("message",equalTo("Заказ не найден"));
     }
-
-
-
 }

@@ -16,7 +16,6 @@ public class CreateCourierTests {
     private String index;
     private String login = "user";
     private String password = "1234";
-
     private String firstName = "saske";
 
     @Before
@@ -40,7 +39,6 @@ public class CreateCourierTests {
                  .then().statusCode(201)
                  .and()
                  .assertThat().body("ok",equalTo(true));
-
     }
     @Test
     public void duplicateCourier() {
@@ -62,8 +60,6 @@ public class CreateCourierTests {
                 .post("/api/v1/courier")
                 .then().statusCode(409);
     }
-
-
     @After
     public void cleanUp(){
         LoginCourierRequestCard getIdCard = new LoginCourierRequestCard(
@@ -80,7 +76,5 @@ public class CreateCourierTests {
                 .spec(BaseHttpClient.baseRequestSpec())
                 .body(idCard)
                 .delete(EndPoints.DELETE_COURIER + idCard.getId());
-
     }
-
 }

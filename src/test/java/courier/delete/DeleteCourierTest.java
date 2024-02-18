@@ -66,9 +66,4 @@ public class DeleteCourierTest {
                 .delete(EndPoints.DELETE_COURIER + courierId.getId()+1)
                 .then().statusCode(404);
     }
-
-
-
-
-
 }

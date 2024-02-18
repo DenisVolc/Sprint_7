@@ -46,11 +46,7 @@ public class LoginCourierTests {
                 .and()
                 .assertThat().body("id",notNullValue());
     }
-
-
-
 //    если авторизоваться под несуществующим пользователем, запрос возвращает ошибку;
-
     @Test
     public void notExistAuthTest(){
         LoginCourierRequestCard card = new LoginCourierRequestCard(login+1,password);
@@ -61,7 +57,6 @@ public class LoginCourierTests {
                 .post(EndPoints.LOGIN_COURIER)
                 .then().statusCode(404);
     }
-
     @After
     public void cleanUp(){
         LoginCourierRequestCard getIdCard = new LoginCourierRequestCard(

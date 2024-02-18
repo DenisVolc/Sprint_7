@@ -2,8 +2,10 @@ package order.list;
 
 import base.BaseHttpClient;
 import endpoint.EndPoints;
+import json.CancelOrderRequestCard;
 import json.CreateOrderRequestCard;
 import json.CreateOrderResponseCard;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +35,7 @@ public class OrderList {
                 .post(EndPoints.ORDER);
     }
     @Test
-    public void listOders(){
+    public void listOrders(){
          given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
@@ -41,14 +43,6 @@ public class OrderList {
                 .then().statusCode(200)
                 .and().assertThat().body("orders.id",notNullValue());
     }
-//    @After
-//    public void cleanUp(){
-//        CancelOrderRequestCard cancelRequest= new CancelOrderRequestCard(orderNumber.getTrack());
-//        given()
-//                .spec(BaseHttpClient.baseRequestSpec())
-//                .body(cancelRequest)
-//                .when()
-//                .put(EndPoints.CANCEL_ORDER);
-//    }
+
 
 }

@@ -9,7 +9,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class CreateOrderTests {
-
 //   тело ответа содержит track.
     @Test
     public void createOrderTest(){

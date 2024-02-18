@@ -39,8 +39,6 @@ public class AcceptOrderTest {
                 .post(EndPoints.ORDER)
                 .then()
                 .extract().path("track").toString();
-
-
         // вывести заказ по трек-номеру, получить айди заказа
         orderId = given()
                 .spec(BaseHttpClient.baseRequestSpec())
@@ -86,7 +84,6 @@ public class AcceptOrderTest {
     //    4.если не передать номер заказа, запрос вернёт ошибку;
     @Test
     public void emptyFieldsAcceptOrder(){ //Здесь возвращается 404, вместо 400. Похоже на дефект
-
         given()
                 .spec(BaseHttpClient.baseRequestSpec())
                 .when()
@@ -112,11 +109,8 @@ public class AcceptOrderTest {
                 .put(EndPoints.ACCEPT_ORDER+orderId)
                 .then().statusCode(400);
     }
-
-
 //    3.если передать неверный id курьера, запрос вернёт ошибку;
 //    5.если передать неверный номер заказа, запрос вернёт ошибку.
-
     @Test
     public void wrongFieldsAcceptOrder(){
         given()
@@ -146,7 +140,6 @@ public class AcceptOrderTest {
     }
     @After
     public void cleanUp(){
-        //deleteCourier(idCourier){}
         given()//удалил пользователя
                 .spec(BaseHttpClient.baseRequestSpec())
                 .delete(EndPoints.DELETE_COURIER + courierId);

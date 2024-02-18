@@ -16,9 +16,7 @@ import static org.hamcrest.Matchers.notNullValue;
 //    можно совсем не указывать цвет;
 @RunWith(Parameterized.class)
 public class CreateOrdersColorsParmTests {
-
     private String[] color;
-
     public CreateOrdersColorsParmTests(String[] color){
         this.color=color;
     }
@@ -31,7 +29,6 @@ public class CreateOrdersColorsParmTests {
                 {new String[]{""}}
         };
     }
-
     @Test
     public void createOrderColorTest() {// сделать параметризированым  и перебрать три комбинации, бещ логина, без пароля, без ничего
         CreateOrderRequestCard order = new CreateOrderRequestCard(

@@ -13,7 +13,7 @@ import static io.restassured.RestAssured.given;
 public class RequiriedFiledsCreateCourierParmTest {
 
     private String login;
-    private String password = "1234";
+    private String password;
 
     public RequiriedFiledsCreateCourierParmTest(String login, String password){
         this.login=login;

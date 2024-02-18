@@ -17,11 +17,10 @@ import static org.hamcrest.core.IsEqual.equalTo;
 @RunWith(Parameterized.class)
 public class RequiriedFiledsLoginCourierParmTest {
 
-    private String index;
     private String login;
     private static String setUpLogin = "sdasdfadfaas";
     private static String setUpPassword = "123";
-    private String password = "1234";
+    private String password;
 
     public RequiriedFiledsLoginCourierParmTest(String login, String password){
         this.login=login;
@@ -37,8 +36,6 @@ public class RequiriedFiledsLoginCourierParmTest {
     }
     @Before
     public void setUp(){
-//        index = String.valueOf((int)(Math.random()*10000));
-//        login += index;
         CreateCourierCard courierCard = new CreateCourierCard(
                 setUpLogin ,
                 setUpPassword,
