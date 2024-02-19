@@ -1,7 +1,9 @@
 package order.bytracknumber;
 
 import base.BaseHttpClient;
-import endpoint.EndPoints;
+import base.GetApi;
+import base.PostApi;
+import constants.EndPoints;
 import json.CreateOrderRequestCard;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +14,9 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class GetOrderByTrackNumderTests {
     private String orderTrackNumber;
+    private GetApi getApi = new GetApi();
+    private PostApi postApi = new PostApi();
+
     @Before
     public void createOrder(){
         CreateOrderRequestCard order = new CreateOrderRequestCard(
@@ -25,44 +30,26 @@ public class GetOrderByTrackNumderTests {
                 "Hello World",
                 new String[]{"BLACK"}
         );
-        orderTrackNumber = given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(order)
-                .when()
-                .post(EndPoints.ORDER)
+        orderTrackNumber = postApi
+                .doPost(EndPoints.ORDER,order)
                 .then()
                 .extract().path("track").toString();
     }
     @Test
     public void getOrderTest(){//     успешный запрос возвращает объект с заказом;
-
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .when()
-                .queryParam("t",orderTrackNumber)
-                .get(EndPoints.ORDER_BY_TRACK)
-                .then().statusCode(200)
-                .assertThat().body("order",notNullValue());
+        getApi.getOrderByTrackNumber(orderTrackNumber)
+        .then().statusCode(200)
+        .assertThat().body("order",notNullValue());
     }
     @Test
     public void noTrackNumberGetOrderTest(){//     запрос без номера заказа возвращает ошибку;
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .when()
-                .queryParam("t","")
-                .get(EndPoints.ORDER_BY_TRACK)
-                .then().statusCode(400)
-                .assertThat().body("message",equalTo("Недостаточно данных для поиска"));
+        getApi.getOrderByTrackNumber("")
+        .then().statusCode(400)
+        .assertThat().body("message",equalTo("Недостаточно данных для поиска"));
     }
     @Test
     public void wrongTrackNumberGetOrderTest(){//     запрос с несуществующим заказом возвращает ошибку.
-
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .when()
-                .queryParam("t",orderTrackNumber+1)
-                .get(EndPoints.ORDER_BY_TRACK)
-                .then().statusCode(404)
+        getApi.getOrderByTrackNumber(orderTrackNumber+1).then().statusCode(404)
                 .assertThat().body("message",equalTo("Заказ не найден"));
     }
 }

@@ -1,7 +1,9 @@
 package courier.login;
 
 import base.BaseHttpClient;
-import endpoint.EndPoints;
+import base.DeleteApi;
+import base.PostApi;
+import constants.EndPoints;
 import json.CreateCourierCard;
 import json.LoginCourierResponseCard;
 import json.LoginCourierRequestCard;
@@ -21,6 +23,8 @@ public class RequiriedFiledsLoginCourierParmTest {
     private static String setUpLogin = "sdasdfadfaas";
     private static String setUpPassword = "123";
     private String password;
+    private DeleteApi deleteApi = new DeleteApi();
+    private PostApi postApi = new PostApi();
 
     public RequiriedFiledsLoginCourierParmTest(String login, String password){
         this.login=login;
@@ -41,11 +45,8 @@ public class RequiriedFiledsLoginCourierParmTest {
                 setUpPassword,
                 null);
 
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(courierCard)
-                .when()
-                .post(EndPoints.CREATE_COURIER);
+
+        postApi.doPost(EndPoints.CREATE_COURIER,courierCard);
     }
     //     для авторизации нужно передать все обязательные поля;
 //    система вернёт ошибку, если неправильно указать логин или пароль;
@@ -57,13 +58,9 @@ public class RequiriedFiledsLoginCourierParmTest {
                 password
                 );
 
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(courierCard)
-                .when()
-                .post(EndPoints.LOGIN_COURIER)
-                .then().statusCode(400)
-                .and().assertThat().body("message",equalTo("Недостаточно данных для входа"));
+        postApi.doPost(EndPoints.LOGIN_COURIER,courierCard)
+                .then().statusCode(400).and().assertThat()
+                .body("message",equalTo("Недостаточно данных для входа"));
     }
     @After
     public void cleanUp(){
@@ -71,16 +68,11 @@ public class RequiriedFiledsLoginCourierParmTest {
                 setUpLogin
                 ,setUpPassword);
 
-        LoginCourierResponseCard idCard = given()//записал id пользователя
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(getIdCard)
-                .post(EndPoints.LOGIN_COURIER)
+        LoginCourierResponseCard idCard = postApi
+                .doPost(EndPoints.LOGIN_COURIER,getIdCard)
                 .body().as(LoginCourierResponseCard.class);
 
-        given()//удалил пользователя
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(idCard)
-                .delete(EndPoints.DELETE_COURIER + idCard.getId());
+        deleteApi.deleteCourier(idCard.getId());
     }
 
 }

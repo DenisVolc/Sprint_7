@@ -1,7 +1,10 @@
 package order.accept;
 
 import base.BaseHttpClient;
-import endpoint.EndPoints;
+import base.DeleteApi;
+import base.GetApi;
+import base.PostApi;
+import constants.EndPoints;
 import json.*;
 import org.junit.After;
 import org.junit.Before;
@@ -18,6 +21,9 @@ public class AcceptOrderTest {
     private String index;
     private String login = "user";
     private String password = "1234";
+    private GetApi getApi = new GetApi();
+    private DeleteApi deleteApi = new DeleteApi();
+    private PostApi postApi = new PostApi();
     @Before
     public void setUp() {
         //создать заказ, получить трек-номер
@@ -32,21 +38,14 @@ public class AcceptOrderTest {
                 "Hello World",
                 new String[]{"BLACK"}
         );
-        orderTrackNumber = given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(order)
-                .when()
-                .post(EndPoints.ORDER)
+
+        orderTrackNumber = postApi.doPost(EndPoints.ORDER,order)
                 .then()
                 .extract().path("track").toString();
         // вывести заказ по трек-номеру, получить айди заказа
-        orderId = given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .when()
-                .queryParam("t",orderTrackNumber)
-                .get(EndPoints.ORDER_BY_TRACK)
-                .then().extract()
-                .path("order.id").toString();
+        orderId = getApi.getOrderByTrackNumber(orderTrackNumber)
+                .then().extract().path("order.id").toString();
+
         //создать курьера
         index = BaseHttpClient.getRandomIndex();
         login += index;
@@ -54,21 +53,14 @@ public class AcceptOrderTest {
                 login ,
                 password,
                 "");
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(courierCard)
-                .when()
-                .post(EndPoints.CREATE_COURIER);
+
+        postApi.doPost(EndPoints.CREATE_COURIER,courierCard);
         //залогиниться курьером, получить айди курьера
         LoginCourierRequestCard card = new LoginCourierRequestCard(login,password);
-        courierId = given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(card)
-                .when()
-                .post(EndPoints.LOGIN_COURIER)
+        courierId = postApi
+                .doPost(EndPoints.LOGIN_COURIER,card)
                 .then().extract()
                 .path("id").toString();
-        System.out.println(courierId);
     }
     @Test
     public void acceptOrder(){//    1.успешный запрос возвращает ok: true;
@@ -140,9 +132,7 @@ public class AcceptOrderTest {
     }
     @After
     public void cleanUp(){
-        given()//удалил пользователя
-                .spec(BaseHttpClient.baseRequestSpec())
-                .delete(EndPoints.DELETE_COURIER + courierId);
+        deleteApi.deleteCourier(courierId);
     }
 }
 

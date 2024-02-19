@@ -1,7 +1,8 @@
 package courier.create;
 
 import base.BaseHttpClient;
-import endpoint.EndPoints;
+import base.PostApi;
+import constants.EndPoints;
 import json.CreateCourierCard;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,7 @@ public class RequiriedFiledsCreateCourierParmTest {
 
     private String login;
     private String password;
+    private PostApi postApi = new PostApi();
 
     public RequiriedFiledsCreateCourierParmTest(String login, String password){
         this.login=login;
@@ -35,11 +37,13 @@ public class RequiriedFiledsCreateCourierParmTest {
                 password,
                 "name");
 
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(courierCard)
-                .when()
-                .post(EndPoints.CREATE_COURIER)
+//        given()
+//                .spec(BaseHttpClient.baseRequestSpec())
+//                .body(courierCard)
+//                .when()
+//                .post(EndPoints.CREATE_COURIER)
+//                .then().statusCode(400);
+        postApi.doPost(EndPoints.CREATE_COURIER,courierCard)
                 .then().statusCode(400);
     }
 }

@@ -1,7 +1,8 @@
 package order.create;
 
 import base.BaseHttpClient;
-import endpoint.EndPoints;
+import base.PostApi;
+import constants.EndPoints;
 import json.CreateOrderRequestCard;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,8 @@ import static org.hamcrest.Matchers.notNullValue;
 @RunWith(Parameterized.class)
 public class CreateOrdersColorsParmTests {
     private String[] color;
+    private PostApi postApi = new PostApi();
+
     public CreateOrdersColorsParmTests(String[] color){
         this.color=color;
     }
@@ -42,11 +45,9 @@ public class CreateOrdersColorsParmTests {
                 "Hello World",
                 color
         );
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(order)
-                .when()
-                .post(EndPoints.ORDER)
+
+        postApi
+                .doPost(EndPoints.ORDER,order)
                 .then().statusCode(201)
                 .and()
                 .assertThat().body("track",notNullValue());;

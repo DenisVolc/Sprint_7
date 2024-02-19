@@ -1,8 +1,11 @@
 package courier.delete;
 
 import base.BaseHttpClient;
-import endpoint.EndPoints;
+import base.DeleteApi;
+import base.PostApi;
+import constants.EndPoints;
 import json.CreateCourierCard;
+import json.DeleteCourierRequest;
 import json.LoginCourierRequestCard;
 import json.LoginCourierResponseCard;
 import org.junit.Before;
@@ -16,7 +19,9 @@ public class DeleteCourierTest {
     private String index;
     private String login = "user";
     private String password = "1234";
-    LoginCourierResponseCard courierId ;
+    private DeleteApi deleteAPi = new DeleteApi();
+    private PostApi postApi = new PostApi();
+    LoginCourierResponseCard courier;
     LoginCourierRequestCard loginCourierRequestCard;
     @Before
     public void setUp() {
@@ -26,44 +31,26 @@ public class DeleteCourierTest {
                 login ,
                 password,
                 "");
-
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(courierCard)
-                .when()
-                .post(EndPoints.CREATE_COURIER);
+        postApi.doPost(EndPoints.CREATE_COURIER,courierCard);
 
         loginCourierRequestCard = new LoginCourierRequestCard(login,password);
-
-        courierId =  given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(loginCourierRequestCard)
-                .when()
-                .post(EndPoints.LOGIN_COURIER)
+        courier = postApi
+                .doPost(EndPoints.LOGIN_COURIER,loginCourierRequestCard)
                 .body().as(LoginCourierResponseCard.class);
     }
     @Test
     public void deleteCourier(){     //    2.успешный запрос возвращает ok: true;
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .delete(EndPoints.DELETE_COURIER+courierId.getId())
-                .then().statusCode(200)
-                .and()
+        deleteAPi.deleteCourier(courier.getId())
+                .then().statusCode(200).and()
                 .assertThat().body("ok",equalTo(true));
     }
     @Test
     public void noIdDeleteCourier(){//    3.если отправить запрос без id, вернётся ошибка;
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body("{\"id\":}")
-                .delete(EndPoints.DELETE_COURIER)
-                .then().statusCode(400);
+        deleteAPi.deleteNoIdCourier().then().statusCode(400);
     }
     @Test
-    public void wrongIddeleteCourier(){//    4.если отправить запрос с несуществующим id, вернётся ошибка.
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .delete(EndPoints.DELETE_COURIER + courierId.getId()+1)
+    public void wrongIdDeleteCourier(){//    4.если отправить запрос с несуществующим id, вернётся ошибка.
+        deleteAPi.deleteCourier(courier.getId()+1)
                 .then().statusCode(404);
     }
 }

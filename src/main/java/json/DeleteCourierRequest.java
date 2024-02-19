@@ -1,0 +1,14 @@
+package json;
+
+public class DeleteCourierRequest {
+    private String id;
+    public DeleteCourierRequest(String id) {
+        this.id = id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public String getId() {
+        return id.toString();
+    }
+}

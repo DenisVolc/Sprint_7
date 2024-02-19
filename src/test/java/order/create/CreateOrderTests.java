@@ -1,7 +1,8 @@
 package order.create;
 
 import base.BaseHttpClient;
-import endpoint.EndPoints;
+import base.PostApi;
+import constants.EndPoints;
 import json.CreateOrderRequestCard;
 import org.junit.Test;
 
@@ -9,6 +10,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class CreateOrderTests {
+    private PostApi postApi = new PostApi();
 //   тело ответа содержит track.
     @Test
     public void createOrderTest(){
@@ -23,11 +25,9 @@ public class CreateOrderTests {
                 "Hello World",
                 new String[]{"BLACK"}
         );
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(order)
-                .when()
-                .post(EndPoints.ORDER)
+
+        postApi
+                .doPost(EndPoints.ORDER,order)
                 .then().statusCode(201)
                 .and()
                 .assertThat().body("track",notNullValue());

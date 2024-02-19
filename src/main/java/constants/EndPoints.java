@@ -1,4 +1,4 @@
-package endpoint;
+package constants;
 
 public class EndPoints {
     //https://qa-scooter.praktikum-services.ru/docs/

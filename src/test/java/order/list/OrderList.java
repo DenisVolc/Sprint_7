@@ -1,20 +1,20 @@
 package order.list;
 
-import base.BaseHttpClient;
-import endpoint.EndPoints;
-import json.CancelOrderRequestCard;
+
+import base.GetApi;
+import base.PostApi;
+import constants.EndPoints;
 import json.CreateOrderRequestCard;
-import json.CreateOrderResponseCard;
-import org.junit.After;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.contains;
+
 import static org.hamcrest.Matchers.notNullValue;
 
 public class OrderList {
-    private CreateOrderResponseCard orderNumber;
+    private GetApi getApi = new GetApi();
+    private PostApi postApi = new PostApi();
     @Before
     public void createOrder(){
         CreateOrderRequestCard order = new CreateOrderRequestCard(
@@ -28,18 +28,11 @@ public class OrderList {
                 "Hello World",
                 new String[]{"BLACK"}
         );
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(order)
-                .when()
-                .post(EndPoints.ORDER);
+        postApi.doPost(EndPoints.ORDER,order);
     }
     @Test
     public void listOrders(){
-         given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .when()
-                .get(EndPoints.ORDER)//"?id=" + orderNumber.getTrack()
+        getApi.getOrders()
                 .then().statusCode(200)
                 .and().assertThat().body("orders.id",notNullValue());
     }

@@ -1,8 +1,10 @@
 package courier.create;
 
 import base.BaseHttpClient;
+import base.DeleteApi;
+import base.PostApi;
 import json.CreateCourierCard;
-import endpoint.EndPoints;
+import constants.EndPoints;
 import json.LoginCourierRequestCard;
 import json.LoginCourierResponseCard;
 import org.junit.Before;
@@ -17,7 +19,8 @@ public class CreateCourierTests {
     private String login = "user";
     private String password = "1234";
     private String firstName = "saske";
-
+    private DeleteApi deleteApi = new DeleteApi();
+    private PostApi postApi = new PostApi();
     @Before
     public void setUp() {
         index = BaseHttpClient.getRandomIndex();
@@ -31,14 +34,11 @@ public class CreateCourierTests {
                 password,
                 firstName);
 
-         given()
-                 .spec(BaseHttpClient.baseRequestSpec())
-                 .body(courierCard)
-                 .when()
-                 .post(EndPoints.CREATE_COURIER)
+         postApi.doPost(EndPoints.CREATE_COURIER,courierCard)
                  .then().statusCode(201)
                  .and()
                  .assertThat().body("ok",equalTo(true));
+
     }
     @Test
     public void duplicateCourier() {
@@ -46,18 +46,8 @@ public class CreateCourierTests {
                 login ,
                 password,
                 firstName);
-
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(courierCard)
-                .when()
-                .post("/api/v1/courier");
-
-        given()
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(courierCard)
-                .when()
-                .post("/api/v1/courier")
+        postApi.doPost(EndPoints.CREATE_COURIER,courierCard);
+        postApi.doPost(EndPoints.CREATE_COURIER,courierCard)
                 .then().statusCode(409);
     }
     @After
@@ -66,15 +56,10 @@ public class CreateCourierTests {
                 login
                 ,password);
 
-        LoginCourierResponseCard idCard = given()//записал id пользователя
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(getIdCard)
-                .post(EndPoints.LOGIN_COURIER)
+        LoginCourierResponseCard idCard =postApi
+                .doPost(EndPoints.LOGIN_COURIER,getIdCard)
                 .body().as(LoginCourierResponseCard.class);
 
-        given()//удалил пользователя
-                .spec(BaseHttpClient.baseRequestSpec())
-                .body(idCard)
-                .delete(EndPoints.DELETE_COURIER + idCard.getId());
+        deleteApi.deleteCourier(idCard.getId());
     }
 }
