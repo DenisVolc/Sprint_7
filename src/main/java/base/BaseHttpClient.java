@@ -9,10 +9,9 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-import static io.restassured.RestAssured.given;
 
 public class BaseHttpClient {
-    public static RequestSpecification baseRequestSpec(){
+    private static RequestSpecification baseRequestSpec(){
         return new RequestSpecBuilder()
                 .setBaseUri(URL.BASE_URL)
                 .addHeader("Content-Type", "application/json")
